@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 构建产物
+zcode/dist/
+*.bak
+*.bak-*
+
+# 本地配置（含凭据，勿提交）
+zcode/mcp/tools.ini
+
+# 运行时产物
+*.log
+*.tmp
+zcode-mcp/
+task-*/
+samples/
+exports/
+patches/
+reports/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 系统
+Thumbs.db
+desktop.ini
+.DS_Store

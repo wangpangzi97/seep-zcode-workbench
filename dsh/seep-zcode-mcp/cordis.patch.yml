@@ -1,0 +1,42 @@
+# Seep ZCode Workbench — DSH bundle patch
+#
+# 挂载本地 seep-zcode MCP 服务端（64 个工具）：
+#   本机工具链 14  +  GDB 内核调试 7  +  VM 执行 6  +  VM 工具封装 17
+#   + 上游合并 17（r2 降噪系列 / apk 系列 / 工作流）+ 知识库 4
+#
+# 关键设计（对照 DSH 的 supervisor 语义）：
+#   failOnStartupError: false
+#     → 连不上只记日志，supervisor 持续重连；服务后来起来能自动接上。
+#       true 会在首次失败时回滚 fiber，之后永不恢复（只能重启 DSH）。
+#   VmRunner / gdbstub 都是按调用惰性连接的，所以服务端本身启动极快，
+#   真正的连接失败只发生在具体工具调用里，不会拖垮 DSH 启动。
+#
+# 关于超时：
+#   seep-zcode 的部分工具是长任务（jadx 全量反编译、capa 大样本、
+#   angr CFG、dnSpy 反编译），可能跑几分钟。DSH 默认工具超时较短，
+#   因此显式抬高；若你的 DSH 版本不认识该字段，会被忽略，不影响启动。
+
+- insert:
+    - id: seep-zcode-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: seepz
+        transport: stdio
+        command: '<PATH_TO_PYTHON_WITH_MCP>'
+        args:
+          - '<PATH_TO_REPO>/zcode/mcp/server.py'
+        cwd: '<PATH_TO_REPO>/zcode'
+        env:
+          PYTHONIOENCODING: 'utf-8'
+          PYTHONUTF8: '1'
+          SEEP_TIMEOUT: '900'
+          SEEP_MAX_OUTPUT: '40000'
+        # 长任务（jadx / capa / angr / dnSpy）需要更宽的超时
+        toolCallTimeoutMs: 900000
+        failOnStartupError: false
+        startupTimeoutMs: 20000
+        reconnect:
+          enabled: true
+          initialDelayMs: 3000
+          maxDelayMs: 30000
+          maxAttempts: 100000

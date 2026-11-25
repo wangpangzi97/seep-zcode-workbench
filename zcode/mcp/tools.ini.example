@@ -1,0 +1,52 @@
+# Seep ZCode Workbench 工具路径配置
+# 由插件读取；改这里即可重定向到别的安装位置。
+# 支持 %VAR% 与 ~ 展开。
+
+[machine]
+# 本机 Python 解释器（必须能 import mcp）
+python = <PATH_TO_PYTHON_WITH_MCP>
+java = <PATH_TO_JAVA>
+
+[paths]
+jadx = <PATH_TO_JADX>
+apktool = <PATH_TO_APKTOOL>
+radare2 = <PATH_TO_RADARE2>
+rabin2 = <PATH_TO_RABIN2>
+radiff2 = <PATH_TO_RADIFF2>
+rahash2 = <PATH_TO_RAHASH2>
+rasm2 = <PATH_TO_RASM2>
+ida = <PATH_TO_IDA>
+ghidra_root = <PATH_TO_GHIDRA_ROOT>
+tshark   = C:\Program Files\Wireshark\tshark.exe
+ffmpeg   = %LOCALAPPDATA%\Microsoft\WinGet\Links\ffmpeg.exe
+ffprobe  = %LOCALAPPDATA%\Microsoft\WinGet\Links\ffprobe.exe
+
+[services]
+# 已经在跑的 HTTP MCP（起没起来由 plugin 探活决定）
+x64dbg_x64 = http://127.0.0.1:3000/mcp
+x64dbg_x86 = http://127.0.0.1:3001/mcp
+ghidra     = http://127.0.0.1:8080/mcp
+
+[vm]
+# 虚拟机上的调试器 MCP；需把插件监听地址改成 0.0.0.0 才连得上
+host = <YOUR_VM_IP>
+x64dbg_port = 3000
+x32dbg_port = 3001
+ida_port = 3101
+# vmrun 执行通道（调用 VM 内没有 MCP 的 CLI 工具）
+vmrun = <PATH_TO_VMRUN>
+vmx = <PATH_TO_YOUR_VMX>
+user = <YOUR_VM_USER>
+password = <YOUR_VM_PASSWORD>
+guest_python = C:\Python313\python.exe
+workdir = C:\zcode-mcp
+
+[gdb]
+# VMware GDB stub —— 指向虚拟机内核，免登录凭据。
+# 前提：vmx 里 debugStub.listen.guest64 = "TRUE"
+host = 127.0.0.1
+port = 8864
+# 单次读写超时（秒）
+timeout = 8
+# 读内存单次上限（字节），防止误操作拉爆上下文
+max_read = 1048576

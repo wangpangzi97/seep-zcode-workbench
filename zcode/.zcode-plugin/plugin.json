@@ -1,0 +1,32 @@
+{
+  "name": "seep-zcode",
+  "version": "1.0.0",
+  "description": "Seep Reverse Lab for ZCode — 本机逆向工具链 MCP 桥 + lab 闸门 + 10 个逆向技能",
+  "skills": "skills",
+  "mcpServers": {
+    "seep-zcode": {
+      "command": "D:\\工具\\Tools\\python-venv\\Scripts\\python.exe",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/server.py"],
+      "env": {
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONUTF8": "1",
+        "SEEP_TIMEOUT": "900",
+        "SEEP_MAX_OUTPUT": "40000"
+      }
+    }
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "process",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/lab-gate.js"],
+            "timeoutMs": 10000
+          }
+        ]
+      }
+    ]
+  }
+}

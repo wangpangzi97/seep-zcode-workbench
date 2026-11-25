@@ -1,0 +1,22 @@
+{
+  "name": "@local/seep-zcode-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Seep ZCode Workbench for DSH — 本机逆向工具链 + VM 调试 + GDB 内核调试（44 个 MCP 工具）",
+  "exports": {
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "locale/*.json",
+    "docs",
+    "icon.svg"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
